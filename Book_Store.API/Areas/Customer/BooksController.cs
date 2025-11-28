@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Book_Store.API.Areas.Customer
 {
-    [Route("[area]/[controller]")]
+    [Route("api/[area]/[controller]")]
     [ApiController]
     [Area("Customer")]
     public class BooksController : ControllerBase
@@ -94,8 +94,8 @@ namespace Book_Store.API.Areas.Customer
         }
 
 
-        [HttpPost("AddToFavorite")]
-        public async Task<IActionResult> AddToFavorite(int bookId)
+        [HttpPost("Favorite")]
+        public async Task<IActionResult> Favorite(int bookId)
         {
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
@@ -118,15 +118,16 @@ namespace Book_Store.API.Areas.Customer
             });
 
             await _favoriteRepository.CommitAsync();
-            return Ok(new
+            return CreatedAtAction(nameof(GetFavorites), new
             {
-                message = "Added to favorites."
+                message = "Added to favorites.",
+
             });
 
         }
 
 
-        [HttpPost("RemoveFavorite")]
+        [HttpDelete("{bookId}")]
         public async Task<IActionResult> RemoveFavorite(int bookId)
         {
             var user = await _userManager.GetUserAsync(User);
@@ -153,8 +154,8 @@ namespace Book_Store.API.Areas.Customer
         }
 
 
-        [HttpGet("GetOrders")]
-        public async Task<IActionResult> GetOrders(string? status)
+        [HttpGet("Orders")]
+        public async Task<IActionResult> Orders(string? status)
         {
             var user = await _userManager.GetUserAsync(User);
             if (user == null)

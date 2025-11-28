@@ -5,7 +5,7 @@ using Stripe.Checkout;
 
 namespace Book_Store.API.Areas.Customer
 {
-    [Route("[area]/[controller]")]
+    [Route("api/[area]/[controller]")]
     [ApiController]
     [Area("Customer")]
     [Authorize]
@@ -26,7 +26,7 @@ namespace Book_Store.API.Areas.Customer
             _promotionRepository = promotionRepository;
             _promotionUsageRepository = promotionUsageRepository;
         }
-        [HttpGet("GetCart")]
+        [HttpGet]
         public async Task<IActionResult> GetCart(string code)
         {
             var user = await _userManager.GetUserAsync(User);
@@ -99,7 +99,7 @@ namespace Book_Store.API.Areas.Customer
         }
 
 
-        [HttpPost("AddToCart")]
+        [HttpPost]
         public async Task<IActionResult> AddToCart(int count, int bookId, CancellationToken cancellationToken)
         {
             var user = await _userManager.GetUserAsync(User);
@@ -120,7 +120,7 @@ namespace Book_Store.API.Areas.Customer
                 bookInDb.Count += count;
                 await _cartRepository.CommitAsync(cancellationToken);
 
-                return Ok(new
+                return CreatedAtAction(nameof(GetCart), new
                 {
                     message = "The number of books in the shopping cart has been successfully updated."
                 });
@@ -135,14 +135,14 @@ namespace Book_Store.API.Areas.Customer
             }, cancellationToken: cancellationToken);
             await _cartRepository.CommitAsync(cancellationToken);
 
-            return Ok(new
+            return CreatedAtAction(nameof(GetCart), new
             {
                 message = "Add book to cart successfully."
             });
         }
 
 
-        [HttpPost("IncrementBook")]
+        [HttpPut("increment/{bookId}")]
         public async Task<IActionResult> IncrementBook(int bookId, CancellationToken cancellationToken)
         {
             var user = await _userManager.GetUserAsync(User);
@@ -175,7 +175,7 @@ namespace Book_Store.API.Areas.Customer
         }
 
 
-        [HttpPost("DecrementBook")]
+        [HttpPut("decrement/{bookId}")]
         public async Task<IActionResult> DecrementBook(int bookId, CancellationToken cancellationToken)
         {
             var user = await _userManager.GetUserAsync(User);
@@ -212,7 +212,7 @@ namespace Book_Store.API.Areas.Customer
         }
 
 
-        [HttpPost("DeleteBook")]
+        [HttpDelete("{bookId}")]
         public async Task<IActionResult> DeleteBook(int bookId, CancellationToken cancellationToken)
         {
             var user = await _userManager.GetUserAsync(User);

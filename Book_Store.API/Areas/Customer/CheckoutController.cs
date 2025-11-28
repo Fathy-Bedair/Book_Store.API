@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Book_Store.API.Areas.Customer
 {
-    [Route("[area]/[controller]")]
+    [Route("api/[area]/[controller]")]
     [ApiController]
     [Area("Customer")]
     public class CheckoutController : ControllerBase
