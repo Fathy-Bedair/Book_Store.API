@@ -48,8 +48,8 @@ namespace Book_Store.API.Areas.Customer
             });
         }
 
-        [HttpGet("Books")]
-        public async Task<IActionResult> Books(int? categoryId)
+        [HttpGet("List")]
+        public async Task<IActionResult> List(int? categoryId)
         {
             var books = await _bookRepositery.GetAsync(includes: [e => e.Category]);
 
@@ -78,7 +78,7 @@ namespace Book_Store.API.Areas.Customer
         }
 
 
-        [HttpGet("GetFavorites")]
+        [HttpGet("Favorites")]
         public async Task<IActionResult> GetFavorites()
         {
             var user = await _userManager.GetUserAsync(User);
